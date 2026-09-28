@@ -19,6 +19,8 @@ jobs:
           git clone --depth 1 https://github.com/theos/sdks.git "$RUNNER_TEMP/theos-sdks"
           rm -rf "$HOME/theos/sdks"
           mv "$RUNNER_TEMP/theos-sdks" "$HOME/theos/sdks"
+      - name: Install ldid
+        run: brew install ldid
       - name: Build arm64e dylib
         run: |
           make -f Makefile.trollstore clean || true
