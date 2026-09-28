@@ -49,3 +49,7 @@ jobs:
           file artifact/probe/DYYYProbe.dylib
           otool -l artifact/probe/DYYYProbe.dylib > artifact/probe/load-commands.txt
           codesign -dv --verbose=4 artifact/probe/DYYYProbe.dylib 2>&1 | tee artifact/probe/codesign.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: DYYY-34.5.0-empty-probe
+          path: artifact/probe/*
