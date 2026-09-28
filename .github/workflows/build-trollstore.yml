@@ -69,3 +69,16 @@ jobs:
         with:
           name: DYYY-34.5.0-empty-probe
           path: artifact/probe/*
+      - name: Build empty arm64 probe
+        run: |
+          make -f Makefile.probe clean || true
+          make -f Makefile.probe probe ARCHS=arm64 FINALPACKAGE=1
+          mkdir -p artifact/probe-arm64
+          cp probe-build/DYYYProbe.dylib probe-build/DYYYProbe.plist artifact/probe-arm64/
+          file artifact/probe-arm64/DYYYProbe.dylib
+          otool -l artifact/probe-arm64/DYYYProbe.dylib > artifact/probe-arm64/load-commands.txt
+          codesign -dv --verbose=4 artifact/probe-arm64/DYYYProbe.dylib 2>&1 | tee artifact/probe-arm64/codesign.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: DYYY-34.5.0-empty-probe-arm64
+          path: artifact/probe-arm64/*
