@@ -10,5 +10,5 @@ include $(THEOS_MAKE_PATH)/tweak.mk
 .PHONY: probe
 probe: all
 	@mkdir -p probe-build
-	@cp -f .theos/obj/arm64e/DYYYProbe.dylib probe-build/DYYYProbe.dylib
+	@cp -f .theos/obj/$(ARCHS)/DYYYProbe.dylib probe-build/DYYYProbe.dylib
 	@cp -f DYYYProbe.plist probe-build/DYYYProbe.plist
