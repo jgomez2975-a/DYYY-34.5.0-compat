@@ -33,7 +33,9 @@ jobs:
           otool -l artifact/DYYY.dylib > artifact/load-commands.txt
           codesign -s - --force artifact/DYYY.dylib
           codesign -dv --verbose=4 artifact/DYYY.dylib 2>&1 | tee artifact/codesign.txt
-          ditto -c -k --sequesterRsrc artifact/DYYY.dylib artifact/DYYY.plist artifact/DYYY-TrollStore.zip
+          mkdir -p artifact/package
+          cp artifact/DYYY.dylib artifact/DYYY.plist artifact/package/
+          ditto -c -k --sequesterRsrc artifact/package artifact/DYYY-TrollStore.zip
       - uses: actions/upload-artifact@v4
         with:
           name: DYYY-34.5.0-TrollStore-arm64e
