@@ -1,4 +1,4 @@
-# 34.5.0 minimal loading baseline
+// 34.5.0 minimal loading baseline
 #import <Foundation/Foundation.h>
 #import <substrate.h>
 
