@@ -40,3 +40,12 @@ jobs:
         with:
           name: DYYY-34.5.0-TrollStore-arm64e
           path: artifact/*
+      - name: Build empty injection probe
+        run: |
+          make -f Makefile.probe clean || true
+          make -f Makefile.probe probe ARCHS=arm64e FINALPACKAGE=1
+          mkdir -p artifact/probe
+          cp probe-build/DYYYProbe.dylib probe-build/DYYYProbe.plist artifact/probe/
+          file artifact/probe/DYYYProbe.dylib
+          otool -l artifact/probe/DYYYProbe.dylib > artifact/probe/load-commands.txt
+          codesign -dv --verbose=4 artifact/probe/DYYYProbe.dylib 2>&1 | tee artifact/probe/codesign.txt
