@@ -1,0 +1,19 @@
+TARGET = iphone:clang:latest:14.0
+ARCHS = arm64
+DEBUG = 0
+FINALPACKAGE = 1
+include $(THEOS)/makefiles/common.mk
+TWEAK_NAME = DYYY34
+DYYY34_FILES = DYYY34Minimal.xm
+DYYY34_CFLAGS = -fobjc-arc -O0
+DYYY34_FRAMEWORKS = UIKit Foundation
+DYYY34_LIBRARIES = substrate
+DYYY34_LOGOS_DEFAULT_GENERATOR = internal
+export THEOS_STRICT_LOGOS=0
+export ERROR_ON_WARNINGS=0
+include $(THEOS_MAKE_PATH)/tweak.mk
+.PHONY: build34
+build34: all
+	@mkdir -p build34
+	@cp .theos/obj/arm64/DYYY34.dylib build34/DYYY34.dylib
+	@cp DYYY34.plist build34/DYYY34.plist
