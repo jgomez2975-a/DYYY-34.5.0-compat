@@ -40,6 +40,22 @@ jobs:
         with:
           name: DYYY-34.5.0-TrollStore-arm64e
           path: artifact/*
+      - name: Build arm64 dylib
+        run: |
+          make -f Makefile.trollstore clean || true
+          make -f Makefile.trollstore trollstore ARCHS=arm64 FINALPACKAGE=1
+          mkdir -p artifact-arm64/package
+          cp build-trollstore/DYYY.dylib build-trollstore/DYYY.plist artifact-arm64/
+          file artifact-arm64/DYYY.dylib
+          otool -l artifact-arm64/DYYY.dylib > artifact-arm64/load-commands.txt
+          codesign -s - --force artifact-arm64/DYYY.dylib
+          codesign -dv --verbose=4 artifact-arm64/DYYY.dylib 2>&1 | tee artifact-arm64/codesign.txt
+          cp artifact-arm64/DYYY.dylib artifact-arm64/DYYY.plist artifact-arm64/package/
+          ditto -c -k --sequesterRsrc artifact-arm64/package artifact-arm64/DYYY-TrollStore.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: DYYY-34.5.0-TrollStore-arm64
+          path: artifact-arm64/*
       - name: Build empty injection probe
         run: |
           make -f Makefile.probe clean || true

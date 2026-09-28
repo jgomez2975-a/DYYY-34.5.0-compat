@@ -16,6 +16,6 @@ include $(THEOS_MAKE_PATH)/tweak.mk
 .PHONY: trollstore
 trollstore: all
 	@mkdir -p build-trollstore
-	@cp -f .theos/obj/arm64e/DYYY.dylib build-trollstore/DYYY.dylib
+	@cp -f .theos/obj/$(ARCHS)/DYYY.dylib build-trollstore/DYYY.dylib
 	@cp -f DYYY++.plist build-trollstore/DYYY.plist
 	@echo Built build-trollstore/DYYY.dylib
