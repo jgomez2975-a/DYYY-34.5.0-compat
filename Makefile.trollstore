@@ -1,0 +1,20 @@
+TARGET = iphone:clang:latest:14.0
+ARCHS = arm64e
+DEBUG = 0
+FINALPACKAGE = 1
+include $(THEOS)/makefiles/common.mk
+TWEAK_NAME = DYYY
+DYYY_FILES = DYYY.xm DYYYFloatSpeedButton.xm DYYYFloatClearButton.xm AWEPlayInteractionViewController.xm AWEModernLongPressPanelTableViewController.xm DYYYCityManager.m DYYYManager.m DYYYSettingViewController.m DYYYSwitchManager.m DYYYToast.m DYYYBottomAlertView.m DYYYUtils.m DYYYABTestHook.xm DYYYScreenshot.m DYYYSocialStats.xm AWEPlayerPlayControlHandler.xm AFDPrivacyHalfScreenViewController.xm UITextField.xm AWEElementStackView.xm AWELeftSideBarViewController.xm AWEFeedProgressSlider.xm AWEPOIDetailUGCPhotosPreviewViewController.xm DYYYConfirmCloseView.m DYYYCustomInputView.m DYYYFilterSettingsView.m DYYYKeywordListView.m DYYYPipPlayer.m DYYYSystemVersionSpoof.xm DYYYSelfTest.m DYYYCrashCatcher.m DYYYPaths.m DYYYSDKPatch.m
+DYYY_CFLAGS = -fobjc-arc -w -Wno-everything -fobjc-runtime=ios-14.0
+DYYY_LDFLAGS = -weak_framework AVFAudio
+DYYY_FRAMEWORKS = UIKit Foundation Security Metal MetalKit CoreImage SwiftUI Combine
+CXXFLAGS += -std=c++17 -fno-rtti -fno-modules
+DYYY_LOGOS_DEFAULT_GENERATOR = internal
+export THEOS_STRICT_LOGOS=0 ERROR_ON_WARNINGS=0 LOGOS_DEFAULT_GENERATOR=internal
+include $(THEOS_MAKE_PATH)/tweak.mk
+.PHONY: trollstore
+trollstore: all
+	@mkdir -p build-trollstore
+	@cp -f .theos/obj/arm64e/DYYY.dylib build-trollstore/DYYY.dylib
+	@cp -f DYYY++.plist build-trollstore/DYYY.plist
+	@echo Built build-trollstore/DYYY.dylib

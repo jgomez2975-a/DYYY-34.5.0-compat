@@ -1,0 +1,36 @@
+name: Build DYYY 34.5 arm64e
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+jobs:
+  build:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Install Theos and SDK
+        run: |
+          git clone --depth 1 https://github.com/theos/theos.git "$HOME/theos"
+          git -C "$HOME/theos" submodule update --init --recursive
+          echo "THEOS=$HOME/theos" >> "$GITHUB_ENV"
+          echo "$HOME/theos/bin" >> "$GITHUB_PATH"
+          git clone --depth 1 https://github.com/theos/sdks.git "$HOME/theos/sdks"
+      - name: Build arm64e dylib
+        run: |
+          make -f Makefile.trollstore clean || true
+          make -f Makefile.trollstore trollstore ARCHS=arm64e FINALPACKAGE=1
+          mkdir -p artifact
+          cp build-trollstore/DYYY.dylib artifact/DYYY.dylib
+          cp build-trollstore/DYYY.plist artifact/DYYY.plist
+          file artifact/DYYY.dylib
+          xcrun --find ld
+          otool -l artifact/DYYY.dylib > artifact/load-commands.txt
+          codesign -s - --force artifact/DYYY.dylib
+          codesign -dv --verbose=4 artifact/DYYY.dylib 2>&1 | tee artifact/codesign.txt
+          ditto -c -k --sequesterRsrc artifact/DYYY.dylib artifact/DYYY.plist artifact/DYYY-TrollStore.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: DYYY-34.5.0-TrollStore-arm64e
+          path: artifact/*

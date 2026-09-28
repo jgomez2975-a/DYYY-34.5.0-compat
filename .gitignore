@@ -1,0 +1,6 @@
+
+.theos/
+build-trollstore*/
+packages/
+*.o
+*.d
